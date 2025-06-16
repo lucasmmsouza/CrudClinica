@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+
+<head th:replace="~{fragments/head :: head('Início')}"></head>
+
+<body class="d-flex flex-column h-100">
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="container flex-shrink-0">
+    <div class="p-5 mb-4 bg-light rounded-3 mt-4">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Bem-vindo ao Consultório</h1>
+            <p class="col-md-8 fs-4">Sistema de gerenciamento de pacientes, médicos e consultas.</p>
+            <p>Utilize a barra de navegação acima para acessar as funcionalidades.</p>
+        </div>
+    </div>
+
+    <div class="row align-items-md-stretch">
+        <div class="col-md-4 mb-3">
+            <div class="h-100 p-5 text-bg-primary rounded-3">
+                <h2>Pacientes</h2>
+                <p>Cadastre, visualize, edite e remova os dados dos pacientes.</p>
+                <a class="btn btn-outline-light" th:href="@{/web/pacientes}" type="button">Gerenciar Pacientes</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="h-100 p-5 bg-light border rounded-3">
+                <h2>Médicos</h2>
+                <p>Cadastre, visualize, edite e remova os dados dos médicos.</p>
+                <a class="btn btn-outline-secondary" th:href="@{/web/medicos}" type="button">Gerenciar Médicos</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="h-100 p-5 text-bg-success rounded-3">
+                <h2>Consultas</h2>
+                <p>Agende, visualize, edite e remova as consultas médicas.</p>
+                <a class="btn btn-outline-light" th:href="@{/web/consultas}" type="button">Gerenciar Consultas</a>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<div th:replace="~{fragments/footer :: scripts}"></div>
+
+</body>
+</html>

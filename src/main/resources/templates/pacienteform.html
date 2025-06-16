@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+
+<head th:replace="~{fragments/head :: head(${paciente.id == null ? 'Novo Paciente' : 'Editar Paciente'})}"></head>
+
+<body class="d-flex flex-column h-100">
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="container flex-shrink-0">
+    <h1 class="mt-4" th:text="${paciente.id == null ? 'Novo Paciente' : 'Editar Paciente'}"></h1>
+
+    <form th:action="@{/web/pacientes/salvar}" th:object="${paciente}" method="post" class="card p-4 mt-3 bg-white shadow-sm rounded">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome:</label>
+            <input type="text" id="nome" th:field="*{nome}" class="form-control" required/>
+        </div>
+
+        <div class="mb-3">
+            <label for="telefone" class="form-label">Telefone:</label>
+            <input type="text" id="telefone" th:field="*{telefone}" class="form-control" required/>
+        </div>
+
+        <div class="d-flex justify-content-start">
+            <button type="submit" class="btn btn-primary me-2">Salvar</button>
+            <a th:href="@{/web/pacientes}" class="btn btn-secondary">Voltar</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<div th:replace="~{fragments/footer :: scripts}"></div>
+</body>
+</html>
