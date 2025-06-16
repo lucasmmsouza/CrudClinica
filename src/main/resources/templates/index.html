@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(
+        head=~{::head},
+        main=~{::main}
+      )}">
 
-<head th:replace="~{fragments/head :: head('Início')}"></head>
+<head>
+    <th:block th:replace="~{fragments/head :: head('Início')}"></th:block>
+</head>
 
-<body class="d-flex flex-column h-100">
-
-<header th:replace="~{fragments/header :: header}"></header>
-
+<body>
 <main class="container flex-shrink-0">
     <div class="p-5 mb-4 bg-light rounded-3 mt-4">
         <div class="container-fluid py-5">
@@ -39,11 +42,6 @@
             </div>
         </div>
     </div>
-
 </main>
-
-<footer th:replace="~{fragments/footer :: footer}"></footer>
-<div th:replace="~{fragments/footer :: scripts}"></div>
-
 </body>
 </html>

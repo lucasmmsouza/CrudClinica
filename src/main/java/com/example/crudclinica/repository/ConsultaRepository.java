@@ -1,9 +1,10 @@
 package com.example.crudclinica.repository;
 
 import com.example.crudclinica.model.Consulta;
-import com.example.crudclinica.model.Medico;
-import com.example.crudclinica.model.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
+    List<Consulta> findByDataBetween(LocalDateTime dataInicial, LocalDateTime dataFinal);
 }

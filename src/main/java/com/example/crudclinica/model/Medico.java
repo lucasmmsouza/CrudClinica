@@ -1,10 +1,12 @@
 package com.example.crudclinica.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
 public class Medico extends Pessoa {
+    @NotBlank(message = "O CRM não pode estar em branco.")
     private String crm;
 
     @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL)

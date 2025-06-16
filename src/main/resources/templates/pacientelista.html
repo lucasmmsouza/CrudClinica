@@ -1,14 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-100">
-
-<head th:replace="~{fragments/head :: head('Lista de Pacientes')}"></head>
-
-<body class="d-flex flex-column h-100">
-
-<header th:replace="~{fragments/header :: header}"></header>
-
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(head=~{::head}, main=~{::main})}">
+<head>
+    <th:block th:replace="~{fragments/head :: head('Lista de Pacientes')}"></th:block>
+</head>
+<body>
 <main class="container flex-shrink-0">
     <h1 class="mt-4">Pacientes</h1>
+
+    <form th:action="@{/web/pacientes}" method="get" class="row g-3 mb-3 align-items-center">
+        <div class="col-auto">
+            <input type="text" name="nome" class="form-control" placeholder="Buscar por nome..." th:value="${nomeFiltro}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a th:href="@{/web/pacientes}" class="btn btn-secondary ms-2">Limpar</a>
+        </div>
+    </form>
+
     <a th:href="@{/web/pacientes/novo}" class="btn btn-success mb-3">Novo Paciente</a>
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
@@ -27,15 +36,11 @@
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(pacientes)}">
-            <td colspan="4" class="text-center">Nenhum paciente cadastrado.</td>
+            <td colspan="4" class="text-center">Nenhum paciente encontrado.</td>
         </tr>
         </tbody>
     </table>
     <a th:href="@{/}" class="btn btn-secondary">Início</a>
 </main>
-
-<footer th:replace="~{fragments/footer :: footer}"></footer>
-<div th:replace="~{fragments/footer :: scripts}"></div>
-
 </body>
 </html>

@@ -2,8 +2,10 @@ package com.example.crudclinica.controller;
 
 import com.example.crudclinica.model.Medico;
 import com.example.crudclinica.repository.MedicoRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -16,8 +18,13 @@ public class MedicoWebController {
     }
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("medicos", repository.findAll());
+    public String listar(@RequestParam(name = "nome", required = false) String nome, Model model) {
+        if (nome != null && !nome.isEmpty()) {
+            model.addAttribute("medicos", repository.findByNomeContainingIgnoreCase(nome));
+        } else {
+            model.addAttribute("medicos", repository.findAll());
+        }
+        model.addAttribute("nomeFiltro", nome);
         return "medicolista";
     }
 
@@ -28,7 +35,10 @@ public class MedicoWebController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(Medico medico) {
+    public String salvar(@Valid @ModelAttribute("medico") Medico medico, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "medicoform";
+        }
         repository.save(medico);
         return "redirect:/web/medicos";
     }

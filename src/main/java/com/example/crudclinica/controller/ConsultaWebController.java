@@ -1,14 +1,18 @@
 package com.example.crudclinica.controller;
 
 import com.example.crudclinica.model.Consulta;
-import com.example.crudclinica.model.Paciente;
-import com.example.crudclinica.model.Medico;
 import com.example.crudclinica.repository.ConsultaRepository;
-import com.example.crudclinica.repository.PacienteRepository;
 import com.example.crudclinica.repository.MedicoRepository;
+import com.example.crudclinica.repository.PacienteRepository;
+import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Controller
 @RequestMapping("/web/consultas")
@@ -24,21 +28,34 @@ public class ConsultaWebController {
     }
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("consultas", consultaRepo.findAll());
+    public String listar(@RequestParam(name = "data", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data, Model model) {
+        if (data != null) {
+            model.addAttribute("consultas", consultaRepo.findByDataBetween(data.atStartOfDay(), data.atTime(LocalTime.MAX)));
+        } else {
+            model.addAttribute("consultas", consultaRepo.findAll());
+        }
+        model.addAttribute("dataFiltro", data);
         return "consultalista";
+    }
+
+    private void carregarDadosFormulario(Model model) {
+        model.addAttribute("pacientes", pacienteRepo.findAll());
+        model.addAttribute("medicos", medicoRepo.findAll());
     }
 
     @GetMapping("/novo")
     public String novo(Model model) {
         model.addAttribute("consulta", new Consulta());
-        model.addAttribute("pacientes", pacienteRepo.findAll());
-        model.addAttribute("medicos", medicoRepo.findAll());
+        carregarDadosFormulario(model);
         return "consultaform";
     }
 
     @PostMapping("/salvar")
-    public String salvar(Consulta consulta) {
+    public String salvar(@Valid @ModelAttribute("consulta") Consulta consulta, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            carregarDadosFormulario(model); // Recarrega os dropdowns se houver erro
+            return "consultaform";
+        }
         consultaRepo.save(consulta);
         return "redirect:/web/consultas";
     }
@@ -46,8 +63,7 @@ public class ConsultaWebController {
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("consulta", consultaRepo.findById(id).orElse(new Consulta()));
-        model.addAttribute("pacientes", pacienteRepo.findAll());
-        model.addAttribute("medicos", medicoRepo.findAll());
+        carregarDadosFormulario(model);
         return "consultaform";
     }
 

@@ -1,14 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-100">
-
-<head th:replace="~{fragments/head :: head('Lista de Consultas')}"></head>
-
-<body class="d-flex flex-column h-100">
-
-<header th:replace="~{fragments/header :: header}"></header>
-
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(head=~{::head}, main=~{::main})}">
+<head>
+    <th:block th:replace="~{fragments/head :: head('Lista de Consultas')}"></th:block>
+</head>
+<body>
 <main class="container flex-shrink-0">
     <h1 class="mt-4">Consultas</h1>
+
+    <form th:action="@{/web/consultas}" method="get" class="row g-3 mb-3 align-items-center">
+        <div class="col-auto">
+            <input type="date" name="data" class="form-control" th:value="${dataFiltro}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a th:href="@{/web/consultas}" class="btn btn-secondary ms-2">Limpar</a>
+        </div>
+    </form>
+
     <a th:href="@{/web/consultas/novo}" class="btn btn-success mb-3">Nova Consulta</a>
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
@@ -22,21 +31,19 @@
             <td th:text="${#temporals.format(consulta.data, 'dd/MM/yyyy HH:mm')}"></td>
             <td th:text="${'R$ ' + #numbers.formatDecimal(consulta.valor, 1, 'POINT', 2, 'COMMA')}"></td>
             <td th:text="${consulta.observacao}"></td>
-            <td th:text="${consulta.paciente?.nome}"></td> <td th:text="${consulta.medico?.nome}"></td>   <td>
-            <a th:href="@{'/web/consultas/editar/' + ${consulta.id}}" class="btn btn-primary btn-sm">Editar</a>
-            <a th:href="@{'/web/consultas/excluir/' + ${consulta.id}}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta consulta?');">Excluir</a>
-        </td>
+            <td th:text="${consulta.paciente?.nome}"></td>
+            <td th:text="${consulta.medico?.nome}"></td>
+            <td>
+                <a th:href="@{'/web/consultas/editar/' + ${consulta.id}}" class="btn btn-primary btn-sm">Editar</a>
+                <a th:href="@{'/web/consultas/excluir/' + ${consulta.id}}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta consulta?');">Excluir</a>
+            </td>
         </tr>
         <tr th:if="${#lists.isEmpty(consultas)}">
-            <td colspan="7" class="text-center">Nenhuma consulta cadastrada.</td>
+            <td colspan="7" class="text-center">Nenhuma consulta encontrada.</td>
         </tr>
         </tbody>
     </table>
     <a th:href="@{/}" class="btn btn-secondary">Início</a>
 </main>
-
-<footer th:replace="~{fragments/footer :: footer}"></footer>
-<div th:replace="~{fragments/footer :: scripts}"></div>
-
 </body>
 </html>
