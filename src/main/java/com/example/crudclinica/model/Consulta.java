@@ -65,3 +65,5 @@ public class Consulta {
         return agenda != null ? agenda.getDataHora() : null;
     }
 }
+
+<PRECISO FAZER A CONSULTA SER UMA CONSULTA E NÃO AGENDAMENTO>
