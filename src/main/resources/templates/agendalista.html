@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(head=~{::head}, main=~{::main})}">
+<head>
+    <th:block th:replace="~{fragments/head :: head('Agenda de Horários')}"></th:block>
+</head>
+<body>
+<main class="container flex-shrink-0">
+    <h1 class="mt-4">Agenda de Horários</h1>
+    <a th:href="@{/web/agenda/novo}" class="btn btn-success mb-3">Gerar Novos Horários</a>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Médico</th>
+            <th>Data e Hora</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="agenda : ${agendas}">
+            <td th:text="${agenda.id}"></td>
+            <td th:text="${agenda.medico.nome}"></td>
+            <td th:text="${#temporals.format(agenda.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
+            <td th:text="${agenda.status}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(agendas)}">
+            <td colspan="4" class="text-center">Nenhum horário encontrado.</td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/}" class="btn btn-secondary">Início</a>
+</main>
+</body>
+</html>

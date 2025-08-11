@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(head=~{::head}, main=~{::main})}">
+<head>
+    <th:block th:replace="~{fragments/head :: head('Gerar Horários')}"></th:block>
+</head>
+<body>
+<main class="container flex-shrink-0">
+    <h1 class="mt-4">Gerar Horários na Agenda</h1>
+    <form th:action="@{/web/agenda/gerar-horarios}" method="post" class="card p-4 mt-3 bg-white shadow-sm rounded">
+        <div class="mb-3">
+            <label for="medico" class="form-label">Médico:</label>
+            <select id="medico" name="medicoId" class="form-select" required>
+                <option value="">Selecione um Médico</option>
+                <option th:each="m : ${medicos}" th:value="${m.id}" th:text="${m.nome}"></option>
+            </select>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="dataInicio" class="form-label">Data de Início:</label>
+                <input type="date" id="dataInicio" name="dataInicio" class="form-control" required/>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="dataFim" class="form-label">Data de Fim:</label>
+                <input type="date" id="dataFim" name="dataFim" class="form-control" required/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="horaInicio" class="form-label">Hora de Início:</label>
+                <input type="time" id="horaInicio" name="horaInicio" class="form-control" required/>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="horaFim" class="form-label">Hora de Fim:</label>
+                <input type="time" id="horaFim" name="horaFim" class="form-control" required/>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="duracao" class="form-label">Duração da consulta (minutos):</label>
+            <input type="number" id="duracao" name="duracao" class="form-control" value="30" required/>
+        </div>
+        <div class="d-flex justify-content-start">
+            <button type="submit" class="btn btn-primary me-2">Gerar Horários</button>
+            <a th:href="@{/web/agenda}" class="btn btn-secondary">Voltar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

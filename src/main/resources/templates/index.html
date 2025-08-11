@@ -1,44 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{fragments/layout :: layout(
-        head=~{::head},
-        main=~{::main}
-      )}">
-
+      th:replace="~{fragments/layout :: layout(head=~{::head}, main=~{::main})}">
 <head>
     <th:block th:replace="~{fragments/head :: head('Início')}"></th:block>
 </head>
-
 <body>
-<main class="container flex-shrink-0">
-    <div class="p-5 mb-4 bg-light rounded-3 mt-4">
+<main class="container mt-4 mb-5">
+    <div class="p-5 mb-4 bg-primary bg-gradient text-white rounded-3">
         <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">Bem-vindo ao Consultório</h1>
+            <h1 class="display-4 fw-bold">Bem-vindo ao Consultório</h1>
             <p class="col-md-8 fs-4">Sistema de gerenciamento de pacientes, médicos e consultas.</p>
-            <p>Utilize a barra de navegação acima para acessar as funcionalidades.</p>
+            <hr class="my-4">
+            <p>Utilize a barra de navegação acima para acessar as funcionalidades do sistema.</p>
         </div>
     </div>
 
-    <div class="row align-items-md-stretch">
-        <div class="col-md-4 mb-3">
-            <div class="h-100 p-5 text-bg-primary rounded-3">
+    <div class="row align-items-md-stretch g-4">
+        <div class="col-md-6">
+            <div class="h-100 p-5 bg-light border rounded-3 shadow-sm">
                 <h2>Pacientes</h2>
                 <p>Cadastre, visualize, edite e remova os dados dos pacientes.</p>
-                <a class="btn btn-outline-light" th:href="@{/web/pacientes}" type="button">Gerenciar Pacientes</a>
+                <a class="btn btn-outline-primary" th:href="@{/web/pacientes}" type="button">Gerenciar Pacientes</a>
             </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <div class="h-100 p-5 bg-light border rounded-3">
+
+        <div class="col-md-6">
+            <div class="h-100 p-5 bg-light border rounded-3 shadow-sm">
                 <h2>Médicos</h2>
                 <p>Cadastre, visualize, edite e remova os dados dos médicos.</p>
                 <a class="btn btn-outline-secondary" th:href="@{/web/medicos}" type="button">Gerenciar Médicos</a>
             </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <div class="h-100 p-5 text-bg-success rounded-3">
+
+        <div class="col-md-6">
+            <div class="h-100 p-5 text-white bg-success rounded-3 shadow-sm">
                 <h2>Consultas</h2>
-                <p>Agende, visualize, edite e remova as consultas médicas.</p>
+                <p>Agende novas consultas e gerencie os agendamentos existentes.</p>
                 <a class="btn btn-outline-light" th:href="@{/web/consultas}" type="button">Gerenciar Consultas</a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="h-100 p-5 text-white bg-info rounded-3 shadow-sm">
+                <h2>Agenda</h2>
+                <p>Crie e administre os horários disponíveis para os médicos.</p>
+                <a class="btn btn-outline-light" th:href="@{/web/agenda}" type="button">Gerenciar Agenda</a>
             </div>
         </div>
     </div>

@@ -6,5 +6,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
-    List<Consulta> findByDataBetween(LocalDateTime dataInicial, LocalDateTime dataFinal);
+    List<Consulta> findByAgendaDataHoraBetween(LocalDateTime dataInicial, LocalDateTime dataFinal);
 }
