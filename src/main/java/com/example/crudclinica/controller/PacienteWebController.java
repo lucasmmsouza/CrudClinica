@@ -39,13 +39,10 @@ public class PacienteWebController {
             return "pacienteform";
         }
 
-        // Se for um novo paciente, cria um usuário para ele
         if (paciente.getId() == null) {
             Usuario novoUsuario = new Usuario();
-            // Lógica simples para criar um nome de usuário. Ex: 'joao.silva'
             String username = paciente.getNome().toLowerCase().split(" ")[0] + "." + paciente.getNome().toLowerCase().split(" ")[1];
             novoUsuario.setUsuario(username);
-            // Senha padrão é o telefone (deve ser trocada no primeiro login)
             novoUsuario.setSenha(passwordEncoder.encode(paciente.getTelefone()));
 
             Role userRole = (Role) roleRepository.findAll().stream().filter(r -> r.getNome().equals("ROLE_USER")).findFirst().orElse(null);
@@ -54,7 +51,7 @@ public class PacienteWebController {
         }
 
         repository.save(paciente);
-        return "redirect:/login"; // Redireciona para o login após o cadastro
+        return "redirect:/login";
     }
 
     @GetMapping

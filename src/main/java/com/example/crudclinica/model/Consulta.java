@@ -11,9 +11,6 @@ public class Consulta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // O campo 'data' foi movido para a Agenda, mas pode ser mantido aqui por redundância se desejado.
-    // Para este exemplo, vamos removê-lo para evitar duplicação de dados.
-
     @NotNull(message = "O valor é obrigatório.")
     @Positive(message = "O valor da consulta deve ser positivo.")
     private Double valor;
@@ -31,7 +28,7 @@ public class Consulta {
     private Medico medico;
 
     @OneToOne
-    @JoinColumn(name = "agenda_id", unique = true) // Garante que um slot de agenda só tenha uma consulta
+    @JoinColumn(name = "agenda_id", unique = true) //
     private Agenda agenda;
 
 
@@ -63,7 +60,6 @@ public class Consulta {
         return "Consulta em: " + (agenda != null ? agenda.getDataHora() : "sem data") + ", Valor: " + valor + ", Obs: " + observacao;
     }
 
-    // Adicionado para manter compatibilidade com o que existia no modelo anterior, buscando a data da agenda.
     @Transient
     public LocalDateTime getData() {
         return agenda != null ? agenda.getDataHora() : null;

@@ -26,7 +26,6 @@ public class ConsultaWebController {
     private final AgendaRepository agendaRepo;
     private final Validator validator; // << TIPO CORRIGIDO
 
-    // Construtor corrigido para usar org.springframework.validation.Validator
     public ConsultaWebController(ConsultaRepository consultaRepo, PacienteRepository pacienteRepo, MedicoRepository medicoRepo, AgendaRepository agendaRepo, Validator validator) {
         this.consultaRepo = consultaRepo;
         this.pacienteRepo = pacienteRepo;
@@ -70,7 +69,6 @@ public class ConsultaWebController {
             }
         }
 
-        // Esta chamada agora funcionará corretamente
         validator.validate(consulta, bindingResult);
 
         if (bindingResult.hasErrors()) {
