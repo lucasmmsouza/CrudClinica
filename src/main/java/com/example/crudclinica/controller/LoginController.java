@@ -13,7 +13,6 @@ public class LoginController {
 
     @GetMapping("/access-denied")
     public String accessDenied() {
-        // Esta linha diz ao Thymeleaf para procurar em "templates/error/access-denied.html"
         return "error/access-denied";
     }
 }
