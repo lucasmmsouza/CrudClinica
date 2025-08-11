@@ -1,33 +1,45 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <header class="sticky-top" th:fragment="header">
     <nav class="navbar navbar-expand-lg bg-light shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-primary" th:href="@{/}">
-                Consultório
-            </a>
+            <a class="navbar-brand fw-bold text-primary" th:href="@{/}">Consultório</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" sec:authorize="isAuthenticated()">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/}">Home</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="nav-link" th:href="@{/web/pacientes}">Pacientes</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="nav-link" th:href="@{/web/medicos}">Médicos</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="nav-link" th:href="@{/web/consultas}">Consultas</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/web/agenda}">Agenda</a>
                     </li>
                 </ul>
+
+                <div class="d-flex align-items-center">
+                    <div sec:authorize="isAuthenticated()">
+                        <span class="navbar-text me-3">
+                            Olá, <strong sec:authentication="name">Usuário</strong>
+                        </span>
+                        <form th:action="@{/logout}" method="post" class="d-inline">
+                            <button class="btn btn-outline-danger btn-sm" type="submit">Sair</button>
+                        </form>
+                    </div>
+                    <div sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn btn-primary">Login</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>

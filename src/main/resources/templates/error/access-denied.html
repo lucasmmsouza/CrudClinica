@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(head=~{::head}, main=~{::main})}">
+<head>
+    <th:block th:replace="~{fragments/head :: head('Acesso Negado')}"></th:block>
+</head>
+<body>
+<main class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-danger">
+            <div class="card-body p-5 text-center">
+                <h1 class="display-1 fw-bold text-danger">403</h1>
+                <h2 class="card-title mb-3">Acesso Negado</h2>
+                <p class="card-text text-muted">
+                    Você não possui permissão para visualizar esta página.
+                </p>
+                <p class="card-text text-muted">
+                    Por favor, entre em contato com o administrador do sistema se você acredita que isso é um erro.
+                </p>
+                <a th:href="@{/}" class="btn btn-primary mt-4">Voltar para a Página Inicial</a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       th:replace="~{fragments/layout :: layout(head=~{::head}, main=~{::main})}">
 <head>
     <th:block th:replace="~{fragments/head :: head('Agenda de Horários')}"></th:block>
 </head>
 <body>
 <main class="container flex-shrink-0">
-    <h1 class="mt-4">Agenda de Horários</h1>
-    <a th:href="@{/web/agenda/novo}" class="btn btn-success mb-3">Gerar Novos Horários</a>
-    <table class="table table-striped table-bordered">
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+        <h1>Agenda de Horários</h1>
+
+        <a th:href="@{/web/agenda/novo}" class="btn btn-success" sec:authorize="hasRole('ADMIN')">
+            Gerar Novos Horários
+        </a>
+    </div>
+
+    <table class="table table-striped table-bordered shadow-sm">
         <thead class="table-dark">
         <tr>
             <th>ID</th>
@@ -22,7 +29,13 @@
             <td th:text="${agenda.id}"></td>
             <td th:text="${agenda.medico.nome}"></td>
             <td th:text="${#temporals.format(agenda.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
-            <td th:text="${agenda.status}"></td>
+            <td>
+                <span th:text="${agenda.status}"
+                      th:classappend="${agenda.status.name() == 'DISPONIVEL'} ? 'text-bg-success' :
+                                     (${agenda.status.name() == 'AGENDADO'} ? 'text-bg-warning' : 'text-bg-secondary')"
+                      class="badge rounded-pill">
+                </span>
+            </td>
         </tr>
         <tr th:if="${#lists.isEmpty(agendas)}">
             <td colspan="4" class="text-center">Nenhum horário encontrado.</td>

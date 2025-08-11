@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       th:replace="~{fragments/layout :: layout(head=~{::head}, main=~{::main})}">
 <head>
     <th:block th:replace="~{fragments/head :: head('Início')}"></th:block>
@@ -16,7 +17,8 @@
     </div>
 
     <div class="row align-items-md-stretch g-4">
-        <div class="col-md-6">
+
+        <div class="col-md-6" sec:authorize="hasRole('ADMIN')">
             <div class="h-100 p-5 bg-light border rounded-3 shadow-sm">
                 <h2>Pacientes</h2>
                 <p>Cadastre, visualize, edite e remova os dados dos pacientes.</p>
@@ -24,7 +26,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" sec:authorize="hasRole('ADMIN')">
             <div class="h-100 p-5 bg-light border rounded-3 shadow-sm">
                 <h2>Médicos</h2>
                 <p>Cadastre, visualize, edite e remova os dados dos médicos.</p>
@@ -32,7 +34,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" sec:authorize="hasRole('ADMIN')">
             <div class="h-100 p-5 text-white bg-success rounded-3 shadow-sm">
                 <h2>Consultas</h2>
                 <p>Agende novas consultas e gerencie os agendamentos existentes.</p>
@@ -40,13 +42,14 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div th:classappend="${#authorization.expression('!hasRole(''ADMIN'')')} ? 'col-12' : 'col-md-6'">
             <div class="h-100 p-5 text-white bg-info rounded-3 shadow-sm">
                 <h2>Agenda</h2>
-                <p>Crie e administre os horários disponíveis para os médicos.</p>
-                <a class="btn btn-outline-light" th:href="@{/web/agenda}" type="button">Gerenciar Agenda</a>
+                <p>Consulte os horários disponíveis e agende suas consultas.</p>
+                <a class="btn btn-outline-light" th:href="@{/web/agenda}" type="button">Consultar Agenda</a>
             </div>
         </div>
+
     </div>
 </main>
 </body>
