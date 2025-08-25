@@ -3,8 +3,6 @@ package com.example.crudclinica.controller;
 import com.example.crudclinica.model.*;
 import com.example.crudclinica.repository.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,9 +22,8 @@ public class ConsultaWebController {
     private final Validator validator;
     private final TipoExameRepository tipoExameRepo;
     private final ExameRepository exameRepo;
-    private final UsuarioRepository usuarioRepo;
 
-    public ConsultaWebController(ConsultaRepository consultaRepo, PacienteRepository pacienteRepo, MedicoRepository medicoRepo, AgendaRepository agendaRepo, Validator validator, TipoExameRepository tipoExameRepo, ExameRepository exameRepo, UsuarioRepository usuarioRepo) {
+    public ConsultaWebController(ConsultaRepository consultaRepo, PacienteRepository pacienteRepo, MedicoRepository medicoRepo, AgendaRepository agendaRepo, Validator validator, TipoExameRepository tipoExameRepo, ExameRepository exameRepo) {
         this.consultaRepo = consultaRepo;
         this.pacienteRepo = pacienteRepo;
         this.medicoRepo = medicoRepo;
@@ -34,23 +31,14 @@ public class ConsultaWebController {
         this.validator = validator;
         this.tipoExameRepo = tipoExameRepo;
         this.exameRepo = exameRepo;
-        this.usuarioRepo = usuarioRepo;
     }
 
     @GetMapping
-    public String listar(@RequestParam(name = "data", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data, Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        Usuario usuario = usuarioRepo.findByUsuario(userDetails.getUsername());
-
-        if (usuario.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            if (data != null) {
-                model.addAttribute("consultas", consultaRepo.findByAgendaDataHoraBetween(data.atStartOfDay(), data.atTime(LocalTime.MAX)));
-            } else {
-                model.addAttribute("consultas", consultaRepo.findAll());
-            }
-        } else if (usuario.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MEDICO"))) {
-            model.addAttribute("consultas", consultaRepo.findByMedicoUsuarioIdOrderByAgendaDataHoraDesc(usuario.getId()));
-        } else { // Paciente
-            model.addAttribute("consultas", consultaRepo.findByPacienteUsuarioIdOrderByAgendaDataHoraDesc(usuario.getId()));
+    public String listar(@RequestParam(name = "data", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data, Model model) {
+        if (data != null) {
+            model.addAttribute("consultas", consultaRepo.findByAgendaDataHoraBetween(data.atStartOfDay(), data.atTime(LocalTime.MAX)));
+        } else {
+            model.addAttribute("consultas", consultaRepo.findAll());
         }
         model.addAttribute("dataFiltro", data);
         return "consultalista";
@@ -75,7 +63,7 @@ public class ConsultaWebController {
                          @RequestParam(required = false) Long tipoExameId,
                          @RequestParam(required = false) String nomeExame,
                          @RequestParam(required = false) String observacoesExame,
-                         Model model, @AuthenticationPrincipal UserDetails userDetails) {
+                         Model model) {
 
         if (consulta.getAgenda() != null && consulta.getAgenda().getId() != null) {
             Agenda agenda = agendaRepo.findById(consulta.getAgenda().getId()).orElse(null);
@@ -85,12 +73,6 @@ public class ConsultaWebController {
             }
         }
 
-        Usuario usuario = usuarioRepo.findByUsuario(userDetails.getUsername());
-        if (usuario.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            Paciente paciente = pacienteRepo.findByUsuarioId(usuario.getId());
-            consulta.setPaciente(paciente);
-        }
-
         validator.validate(consulta, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -98,16 +80,15 @@ public class ConsultaWebController {
             return "consultaform";
         }
 
-        // Se a consulta for nova, atualiza a agenda
-        if (consulta.getId() == null) {
-            Agenda agenda = consulta.getAgenda();
-            agenda.setStatus(StatusAgenda.AGENDADO);
-            agenda.setConsulta(consulta);
-            agendaRepo.save(agenda);
-        }
+        Agenda agenda = consulta.getAgenda();
+        agenda.setStatus(StatusAgenda.AGENDADO);
+        agenda.setConsulta(consulta);
 
+        // Salva a consulta primeiro para que ela tenha um ID
         Consulta consultaSalva = consultaRepo.save(consulta);
+        agendaRepo.save(agenda);
 
+        // Verifica se um exame foi solicitado
         if (nomeExame != null && !nomeExame.trim().isEmpty() && tipoExameId != null) {
             TipoExame tipoExame = tipoExameRepo.findById(tipoExameId).orElse(null);
             if (tipoExame != null) {
@@ -115,7 +96,7 @@ public class ConsultaWebController {
                 novoExame.setTipoExame(tipoExame);
                 novoExame.setNomeExame(nomeExame);
                 novoExame.setObservacoes(observacoesExame);
-                novoExame.setConsulta(consultaSalva);
+                novoExame.setConsulta(consultaSalva); // Associa o exame à consulta salva
                 exameRepo.save(novoExame);
             }
         }
@@ -149,7 +130,7 @@ public class ConsultaWebController {
             Agenda agenda = consulta.getAgenda();
             if (agenda != null) {
                 agenda.setStatus(StatusAgenda.DISPONIVEL);
-                agenda.setConsulta(null);
+                agenda.setConsulta(null); // Desvincula a consulta do horário
                 agendaRepo.save(agenda);
             }
         });
