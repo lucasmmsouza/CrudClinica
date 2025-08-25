@@ -66,4 +66,3 @@ public class Consulta {
     }
 }
 
-<PRECISO FAZER A CONSULTA SER UMA CONSULTA E NÃO AGENDAMENTO>

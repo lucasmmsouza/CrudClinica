@@ -22,7 +22,11 @@
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
         <tr>
-            <th>ID</th><th>Nome</th><th>Telefone</th><th>Ações</th>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Endereço</th>
+            <th>Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -30,13 +34,14 @@
             <td th:text="${paciente.id}"></td>
             <td th:text="${paciente.nome}"></td>
             <td th:text="${paciente.telefone}"></td>
+            <td th:text="${paciente.endereco}"></td>
             <td>
                 <a th:href="@{'/web/pacientes/editar/' + ${paciente.id}}" class="btn btn-primary btn-sm">Editar</a>
                 <a th:href="@{'/web/pacientes/excluir/' + ${paciente.id}}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este paciente?');">Excluir</a>
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(pacientes)}">
-            <td colspan="4" class="text-center">Nenhum paciente encontrado.</td>
+            <td colspan="5" class="text-center">Nenhum paciente encontrado.</td>
         </tr>
         </tbody>
     </table>

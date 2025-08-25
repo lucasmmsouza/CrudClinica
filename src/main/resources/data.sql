@@ -30,6 +30,15 @@ INSERT INTO paciente (id, telefone) VALUES (2, '88888-2222');
 INSERT INTO pessoa (id, nome) VALUES (4, 'Dr. Carlos');
 INSERT INTO medico (id, crm) VALUES (4, '67890');
 
+-- Endereços (agora com cidade e estado como texto)
+INSERT INTO endereco (id, rua, numero, bairro, cep, cidade, estado) VALUES (1, 'Av. JK', '100', 'Centro', '77000-000', 'Palmas', 'TO');
+INSERT INTO endereco (id, rua, numero, bairro, cep, cidade, estado) VALUES (2, 'Rua das Flores', '25', 'Jardim Aureny IV', '77000-001', 'Palmas', 'TO');
+
+-- Associe os endereços aos pacientes existentes
+UPDATE paciente SET endereco_id = 1 WHERE id = 1;
+UPDATE paciente SET endereco_id = 2 WHERE id = 2;
+
+
 -- Agendas
 INSERT INTO agenda (id, medico_id, data_hora, status) VALUES (1, 3, '2025-09-10T09:00:00', 'AGENDADO');
 INSERT INTO agenda (id, medico_id, data_hora, status) VALUES (2, 3, '2025-09-10T10:00:00', 'DISPONIVEL');
@@ -46,3 +55,4 @@ ALTER TABLE agenda ALTER COLUMN id RESTART WITH 5;
 ALTER TABLE consulta ALTER COLUMN id RESTART WITH 3;
 ALTER TABLE usuario ALTER COLUMN id RESTART WITH 3;
 ALTER TABLE role ALTER COLUMN id RESTART WITH 3;
+ALTER TABLE endereco ALTER COLUMN id RESTART WITH 3;

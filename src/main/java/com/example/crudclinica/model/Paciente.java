@@ -12,6 +12,11 @@ public class Paciente extends Pessoa {
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
     private List<Consulta> consultas;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
+    private Endereco endereco;
+
+
     public Paciente() {}
 
     public Paciente(String nome, String telefone) {
@@ -24,6 +29,10 @@ public class Paciente extends Pessoa {
 
     public List<Consulta> getConsultas() { return consultas; }
     public void setConsultas(List<Consulta> consultas) { this.consultas = consultas; }
+
+    public Endereco getEndereco() { return endereco; }
+    public void setEndereco(Endereco endereco) { this.endereco = endereco; }
+
 
     public String dados() {
         return "Paciente: " + getNome() + ", Telefone: " + telefone;
