@@ -3,6 +3,7 @@
 -- Roles
 INSERT INTO role (id, nome) VALUES (1, 'ROLE_ADMIN');
 INSERT INTO role (id, nome) VALUES (2, 'ROLE_USER');
+INSERT INTO role (id, nome) VALUES (3, 'ROLE_MEDICO'); -- NOVA ROLE
 
 -- Usuarios
 -- Senha para 'admin' é 'admin'
@@ -14,6 +15,9 @@ INSERT INTO usuario (id, usuario, senha) VALUES (2, 'user', '$2a$10$QCiMFmydE3Gs
 INSERT INTO usuario_role (usuario_id, role_id) VALUES (1, 1); -- admin -> ROLE_ADMIN
 INSERT INTO usuario_role (usuario_id, role_id) VALUES (1, 2); -- admin -> ROLE_USER
 INSERT INTO usuario_role (usuario_id, role_id) VALUES (2, 2); -- user -> ROLE_USER
+-- Associando a médica Ana (ID 3) também à ROLE_MEDICO
+INSERT INTO usuario_role (usuario_id, role_id) VALUES (1, 3); -- Dra. Ana (admin) -> ROLE_MEDICO
+
 
 -- Pessoas (associando a usuários existentes)
 -- Medico admin
@@ -54,15 +58,12 @@ INSERT INTO tipo_exame (id, nome) VALUES (2, 'Exame de Imagem');
 INSERT INTO tipo_exame (id, nome) VALUES (3, 'Exame Cardiológico');
 INSERT INTO tipo_exame (id, nome) VALUES (4, 'Biópsia');
 
--- Reinicia a contagem dos IDs
-ALTER TABLE tipo_exame ALTER COLUMN id RESTART WITH 5;
 
 -- Reinicia a contagem dos IDs
+ALTER TABLE tipo_exame ALTER COLUMN id RESTART WITH 5;
 ALTER TABLE pessoa ALTER COLUMN id RESTART WITH 5;
 ALTER TABLE agenda ALTER COLUMN id RESTART WITH 5;
-ALTER TABLE consulta ALTER COLUMN id RESTART WITH 3; -- Garanta que este número seja maior que o último ID inserido
+ALTER TABLE consulta ALTER COLUMN id RESTART WITH 3;
 ALTER TABLE usuario ALTER COLUMN id RESTART WITH 3;
-ALTER TABLE role ALTER COLUMN id RESTART WITH 3;
+ALTER TABLE role ALTER COLUMN id RESTART WITH 4; -- ATUALIZADO
 ALTER TABLE endereco ALTER COLUMN id RESTART WITH 3;
-ALTER TABLE tipo_exame ALTER COLUMN id RESTART WITH 5;
-

@@ -11,4 +11,5 @@ public interface AgendaRepository extends JpaRepository<Agenda, Long> {
     List<Agenda> findByMedicoAndStatusAndDataHoraBetween(Medico medico, StatusAgenda status, LocalDateTime inicio, LocalDateTime fim);
     List<Agenda> findByMedicoAndDataHoraBetween(Medico medico, LocalDateTime inicio, LocalDateTime fim);
     List<Agenda> findByStatus(StatusAgenda status);
+    List<Agenda> findByMedicoUsuarioId(Long usuarioId);
 }

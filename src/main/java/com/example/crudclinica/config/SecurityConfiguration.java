@@ -28,11 +28,12 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/web/pacientes/novo", "/web/pacientes/salvar").permitAll()
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/cadastro").permitAll()
                         .requestMatchers("/web/medicos/**", "/web/pacientes/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/web/agenda").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/web/agenda/**").hasRole("ADMIN")
                         .requestMatchers("/web/consultas/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/web/pacientes/historico/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

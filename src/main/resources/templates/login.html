@@ -11,15 +11,18 @@
             <div class="card-body p-4">
                 <h2 class="card-title text-center mb-4">Acessar Sistema</h2>
 
-                <!-- Mensagem de erro -->
                 <div th:if="${param.error}" class="alert alert-danger" role="alert">
                     Usuário ou senha inválidos.
                 </div>
 
-                <!-- Mensagem de logout -->
                 <div th:if="${param.logout}" class="alert alert-success" role="alert">
                     Você saiu do sistema.
                 </div>
+
+                <div th:if="${param.cadastro == 'sucesso'}" class="alert alert-success" role="alert">
+                    Cadastro realizado com sucesso! Faça o login para continuar.
+                </div>
+
 
                 <form th:action="@{/login}" method="post">
                     <div class="mb-3">
@@ -34,6 +37,10 @@
                         <button type="submit" class="btn btn-primary">Entrar</button>
                     </div>
                 </form>
+                <div class="text-center mt-3">
+                    <p class="text-muted mb-0">Não tem uma conta?</p>
+                    <a th:href="@{/cadastro}" class="btn btn-link">Cadastre-se</a>
+                </div>
             </div>
         </div>
         <div class="text-center mt-3">

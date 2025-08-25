@@ -19,7 +19,7 @@
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="nav-link" th:href="@{/web/medicos}">Médicos</a>
                     </li>
-                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'MEDICO')">
                         <a class="nav-link" th:href="@{/web/consultas}">Consultas</a>
                     </li>
                     <li class="nav-item">

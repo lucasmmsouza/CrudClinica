@@ -1,17 +1,24 @@
 package com.example.crudclinica.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "A rua não pode estar em branco.")
     private String rua;
+    @NotBlank(message = "O número não pode estar em branco.")
     private String numero;
+    @NotBlank(message = "O bairro não pode estar em branco.")
     private String bairro;
+    @NotBlank(message = "O CEP não pode estar em branco.")
     private String cep;
+    @NotBlank(message = "A cidade não pode estar em branco.")
     private String cidade;
+    @NotBlank(message = "O estado não pode estar em branco.")
     private String estado; // Armazenará a sigla do estado (UF)
 
     // Getters e Setters

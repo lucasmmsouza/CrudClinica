@@ -11,15 +11,24 @@
     <form th:action="@{/web/consultas/salvar}" th:object="${consulta}" method="post" class="card p-4 mt-3 bg-white shadow-sm rounded">
         <input type="hidden" th:field="*{id}" />
 
-        <div class="mb-3">
-            <label for="agenda" class="form-label">Horário Disponível:</label>
-            <select id="agenda" th:field="*{agenda}" class="form-select"
-                    th:classappend="${#fields.hasErrors('agenda')} ? 'is-invalid' : ''">
-                <option value="">Selecione um Horário</option>
-                <option th:each="a : ${horariosDisponiveis}" th:value="${a.id}"
-                        th:text="${a.medico.nome} + ' - ' + ${#temporals.format(a.dataHora, 'dd/MM/yyyy HH:mm')}"></option>
-            </select>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('agenda')}" th:errors="*{agenda}"></div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="paciente" class="form-label">Paciente:</label>
+                <select id="paciente" th:field="*{paciente}" class="form-select" th:classappend="${#fields.hasErrors('paciente')} ? 'is-invalid' : ''" th:disabled="${consulta.id != null}">
+                    <option value="">Selecione um Paciente</option>
+                    <option th:each="p : ${pacientes}" th:value="${p.id}" th:text="${p.nome}"></option>
+                </select>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('paciente')}" th:errors="*{paciente}"></div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="agenda" class="form-label">Horário Disponível:</label>
+                <select id="agenda" th:field="*{agenda}" class="form-select" th:classappend="${#fields.hasErrors('agenda')} ? 'is-invalid' : ''" th:disabled="${consulta.id != null}">
+                    <option value="">Selecione um Horário</option>
+                    <option th:each="a : ${horariosDisponiveis}" th:value="${a.id}"
+                            th:text="${a.medico.nome} + ' - ' + ${#temporals.format(a.dataHora, 'dd/MM/yyyy HH:mm')}"></option>
+                </select>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('agenda')}" th:errors="*{agenda}"></div>
+            </div>
         </div>
 
         <div class="mb-3">
@@ -34,17 +43,19 @@
             <textarea id="observacao" th:field="*{observacao}" class="form-control" rows="3"></textarea>
         </div>
 
-        <div class="mb-3">
-            <label for="paciente" class="form-label">Paciente:</label>
-            <select id="paciente" th:field="*{paciente}" class="form-select"
-                    th:classappend="${#fields.hasErrors('paciente')} ? 'is-invalid' : ''">
-                <option value="">Selecione um Paciente</option>
-                <option th:each="p : ${pacientes}" th:value="${p.id}" th:text="${p.nome}"></option>
-            </select>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('paciente')}" th:errors="*{paciente}"></div>
+
+        <div th:if="${consulta.id != null and !#lists.isEmpty(consulta.exames)}">
+            <h5 class="mt-4">Exames Já Solicitados</h5>
+            <ul class="list-group mb-3">
+                <li th:each="exame : ${consulta.exames}" class="list-group-item">
+                    <p class="mb-1"><strong>Exame:</strong> <span th:text="${exame.nomeExame}"></span></p>
+                    <p class="mb-1"><strong>Tipo:</strong> <span th:text="${exame.tipoExame.nome}"></span></p>
+                    <p class="mb-0 text-muted"><strong>Observações:</strong> <span th:text="${exame.observacoes}"></span></p>
+                </li>
+            </ul>
         </div>
 
-        <h5 class="mt-4">Solicitar Exame (Opcional)</h5>
+        <h5 class="mt-4">Adicionar Novo Exame (Opcional)</h5>
         <hr>
         <div class="row">
             <div class="col-md-6 mb-3">
@@ -63,7 +74,6 @@
             <label for="observacoesExame" class="form-label">Observações do Exame:</label>
             <textarea id="observacoesExame" name="observacoesExame" class="form-control" rows="2"></textarea>
         </div>
-
 
         <div class="d-flex justify-content-start mt-4">
             <button type="submit" class="btn btn-primary me-2">Salvar</button>
