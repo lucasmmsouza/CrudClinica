@@ -31,7 +31,7 @@
 
         <div class="mb-3">
             <label for="observacao" class="form-label">Observação:</label>
-            <input type="text" id="observacao" th:field="*{observacao}" class="form-control" />
+            <textarea id="observacao" th:field="*{observacao}" class="form-control" rows="3"></textarea>
         </div>
 
         <div class="mb-3">
@@ -44,7 +44,28 @@
             <div class="invalid-feedback" th:if="${#fields.hasErrors('paciente')}" th:errors="*{paciente}"></div>
         </div>
 
-        <div class="d-flex justify-content-start">
+        <h5 class="mt-4">Solicitar Exame (Opcional)</h5>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="tipoExameId" class="form-label">Tipo de Exame:</label>
+                <select id="tipoExameId" name="tipoExameId" class="form-select">
+                    <option value="">Selecione um tipo</option>
+                    <option th:each="tipo : ${tiposExame}" th:value="${tipo.id}" th:text="${tipo.nome}"></option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="nomeExame" class="form-label">Nome do Exame:</label>
+                <input type="text" id="nomeExame" name="nomeExame" class="form-control" placeholder="Ex: Hemograma completo"/>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="observacoesExame" class="form-label">Observações do Exame:</label>
+            <textarea id="observacoesExame" name="observacoesExame" class="form-control" rows="2"></textarea>
+        </div>
+
+
+        <div class="d-flex justify-content-start mt-4">
             <button type="submit" class="btn btn-primary me-2">Salvar</button>
             <a th:href="@{/web/consultas}" class="btn btn-secondary">Voltar</a>
         </div>

@@ -38,6 +38,7 @@
             <td>
                 <a th:href="@{'/web/pacientes/editar/' + ${paciente.id}}" class="btn btn-primary btn-sm">Editar</a>
                 <a th:href="@{'/web/pacientes/excluir/' + ${paciente.id}}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este paciente?');">Excluir</a>
+                <a th:href="@{'/web/pacientes/historico/' + ${paciente.id}}" class="btn btn-info btn-sm">Histórico</a>
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(pacientes)}">

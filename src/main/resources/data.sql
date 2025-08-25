@@ -46,13 +46,23 @@ INSERT INTO agenda (id, medico_id, data_hora, status) VALUES (3, 4, '2025-09-11T
 INSERT INTO agenda (id, medico_id, data_hora, status) VALUES (4, 4, '2025-09-11T15:00:00', 'DISPONIVEL');
 
 -- Consultas
-INSERT INTO consulta (id, valor, observacao, paciente_id, medico_id, agenda_id) VALUES (1, 200.0, 'Primeira consulta', 1, 3, 1);
-INSERT INTO consulta (id, valor, observacao, paciente_id, medico_id, agenda_id) VALUES (2, 250.0, 'Retorno', 2, 4, 3);
+INSERT INTO consulta (id, valor, observacao, paciente_id, medico_id, agenda_id, status) VALUES (1, 200.0, 'Primeira consulta', 1, 3, 1, 'AGENDADA');
+INSERT INTO consulta (id, valor, observacao, paciente_id, medico_id, agenda_id, status) VALUES (2, 250.0, 'Retorno', 2, 4, 3, 'REALIZADA');
+-- Tipos de Exame
+INSERT INTO tipo_exame (id, nome) VALUES (1, 'Exame de Sangue');
+INSERT INTO tipo_exame (id, nome) VALUES (2, 'Exame de Imagem');
+INSERT INTO tipo_exame (id, nome) VALUES (3, 'Exame Cardiológico');
+INSERT INTO tipo_exame (id, nome) VALUES (4, 'Biópsia');
+
+-- Reinicia a contagem dos IDs
+ALTER TABLE tipo_exame ALTER COLUMN id RESTART WITH 5;
 
 -- Reinicia a contagem dos IDs
 ALTER TABLE pessoa ALTER COLUMN id RESTART WITH 5;
 ALTER TABLE agenda ALTER COLUMN id RESTART WITH 5;
-ALTER TABLE consulta ALTER COLUMN id RESTART WITH 3;
+ALTER TABLE consulta ALTER COLUMN id RESTART WITH 3; -- Garanta que este número seja maior que o último ID inserido
 ALTER TABLE usuario ALTER COLUMN id RESTART WITH 3;
 ALTER TABLE role ALTER COLUMN id RESTART WITH 3;
 ALTER TABLE endereco ALTER COLUMN id RESTART WITH 3;
+ALTER TABLE tipo_exame ALTER COLUMN id RESTART WITH 5;
+

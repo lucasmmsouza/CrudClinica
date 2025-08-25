@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Consulta {
@@ -28,11 +30,19 @@ public class Consulta {
     private Medico medico;
 
     @OneToOne
-    @JoinColumn(name = "agenda_id", unique = true) //
+    @JoinColumn(name = "agenda_id", unique = true)
     private Agenda agenda;
 
+    @OneToMany(mappedBy = "consulta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Exame> exames = new ArrayList<>();
 
-    public Consulta() {}
+    @Enumerated(EnumType.STRING)
+    private StatusConsulta status; // NOVO CAMPO
+
+
+    public Consulta() {
+        this.status = StatusConsulta.AGENDADA; // Define o status padrão
+    }
 
     public Consulta(Double valor, String observacao, Paciente paciente, Medico medico, Agenda agenda) {
         this.valor = valor;
@@ -40,6 +50,7 @@ public class Consulta {
         this.paciente = paciente;
         this.medico = medico;
         this.agenda = agenda;
+        this.status = StatusConsulta.AGENDADA; // Define o status padrão
     }
 
     // Getters e Setters...
@@ -55,6 +66,10 @@ public class Consulta {
     public void setMedico(Medico medico) { this.medico = medico; }
     public Agenda getAgenda() { return agenda; }
     public void setAgenda(Agenda agenda) { this.agenda = agenda; }
+    public List<Exame> getExames() { return exames; }
+    public void setExames(List<Exame> exames) { this.exames = exames; }
+    public StatusConsulta getStatus() { return status; } // GETTER
+    public void setStatus(StatusConsulta status) { this.status = status; } // SETTER
 
     public String dados() {
         return "Consulta em: " + (agenda != null ? agenda.getDataHora() : "sem data") + ", Valor: " + valor + ", Obs: " + observacao;
@@ -65,4 +80,3 @@ public class Consulta {
         return agenda != null ? agenda.getDataHora() : null;
     }
 }
-

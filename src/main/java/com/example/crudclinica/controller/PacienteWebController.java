@@ -1,9 +1,10 @@
 package com.example.crudclinica.controller;
 
-import com.example.crudclinica.model.Endereco; // IMPORT ADICIONADO
+import com.example.crudclinica.model.Endereco;
 import com.example.crudclinica.model.Paciente;
 import com.example.crudclinica.model.Role;
 import com.example.crudclinica.model.Usuario;
+import com.example.crudclinica.repository.ConsultaRepository;
 import com.example.crudclinica.repository.PacienteRepository;
 import com.example.crudclinica.repository.RoleRepository;
 import jakarta.validation.Valid;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
-import java.util.Optional; // IMPORT ADICIONADO
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/web/pacientes")
@@ -24,13 +25,14 @@ public class PacienteWebController {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final RestTemplate restTemplate;
+    private final ConsultaRepository consultaRepository; // <-- 1. DECLARAÇÃO DO CAMPO QUE FALTAVA
 
-
-    public PacienteWebController(PacienteRepository repository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, RestTemplate restTemplate) {
+    public PacienteWebController(PacienteRepository repository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, RestTemplate restTemplate, ConsultaRepository consultaRepository) {
         this.repository = repository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.restTemplate = restTemplate;
+        this.consultaRepository = consultaRepository; // <-- 2. ATRIBUIÇÃO NO CONSTRUTOR
     }
 
     private void carregarDadosDoFormulario(Model model) {
@@ -43,7 +45,7 @@ public class PacienteWebController {
     @GetMapping("/novo")
     public String novo(Model model) {
         Paciente paciente = new Paciente();
-        paciente.setEndereco(new Endereco()); // GARANTE QUE O ENDEREÇO NUNCA SEJA NULO
+        paciente.setEndereco(new Endereco());
         model.addAttribute("paciente", paciente);
         carregarDadosDoFormulario(model);
         return "pacienteform";
@@ -68,7 +70,7 @@ public class PacienteWebController {
         }
 
         repository.save(paciente);
-        return "redirect:/web/pacientes"; // Corrigido para /web/pacientes em vez de /login
+        return "redirect:/web/pacientes";
     }
 
     @GetMapping
@@ -88,11 +90,10 @@ public class PacienteWebController {
         if (pacienteOpt.isPresent()) {
             Paciente paciente = pacienteOpt.get();
             if (paciente.getEndereco() == null) {
-                paciente.setEndereco(new Endereco()); // GARANTE QUE O ENDEREÇO NUNCA SEJA NULO
+                paciente.setEndereco(new Endereco());
             }
             model.addAttribute("paciente", paciente);
         } else {
-            // Se não encontrar, redireciona para a lista (ou mostra uma página de erro)
             return "redirect:/web/pacientes";
         }
 
@@ -104,5 +105,15 @@ public class PacienteWebController {
     public String excluir(@PathVariable Long id) {
         repository.deleteById(id);
         return "redirect:/web/pacientes";
+    }
+
+    @GetMapping("/historico/{id}")
+    public String historico(@PathVariable Long id, Model model) {
+        Paciente paciente = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Paciente inválido:" + id));
+
+        model.addAttribute("paciente", paciente);
+        model.addAttribute("consultas", consultaRepository.findByPacienteIdOrderByAgendaDataHoraDesc(id));
+        return "historicoPaciente";
     }
 }
